@@ -1,0 +1,41 @@
+{
+	"compiler": {
+		"version": "0.6.8+commit.0bbfe453"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"methods": {}
+		},
+		"userdoc": {
+			"methods": {}
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"DISNEY/SafeMath.sol": "SafeMath"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"DISNEY/SafeMath.sol": {
+			"keccak256": "0x14f7bc344c24517d9e14ebb8071e1cb63075b95203876f13c480d5b5c02f39f4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2d2eccaeae93039976ec6de037a3eccecb187a02e137a517e003120e28394940",
+				"dweb:/ipfs/QmaU8PiMvddzenJPjz7gYgCSzEvxfbDjikkneXE8nHcvKo"
+			]
+		}
+	},
+	"version": 1
+}

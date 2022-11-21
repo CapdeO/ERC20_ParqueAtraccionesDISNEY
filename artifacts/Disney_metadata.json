@@ -1,0 +1,147 @@
+{
+	"compiler": {
+		"version": "0.6.8+commit.0bbfe453"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "Clientes",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokens_comprados",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_numTokens",
+						"type": "uint256"
+					}
+				],
+				"name": "CompraTokens",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_numTokens",
+						"type": "uint256"
+					}
+				],
+				"name": "GeneraTokens",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "MisTokens",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "balanceOf",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address payable",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"methods": {}
+		},
+		"userdoc": {
+			"methods": {}
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"DISNEY/Disney.sol": "Disney"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"DISNEY/Disney.sol": {
+			"keccak256": "0xa9477aff820a2acf8c5a8b81c8b8d342389ea6ba6c61b4ce3687094f0cacd757",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://20a389aa420658fede9a77b5b1656cbdcace6457ac3e9eeb819fe7d9c102d028",
+				"dweb:/ipfs/QmTf4aUUsjYNzQ6ufYkor2nz5oHbMDmyVn8EX6uQ7wuTBj"
+			]
+		},
+		"DISNEY/ERC20.sol": {
+			"keccak256": "0x1f201d06a830dcaab96ccf63708cff43d7e27d85681f2abcc5320e46da98fb8d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ebc0201c603660d5d04c398427b87d66b1d19df38eb900d7725ececa55d985ea",
+				"dweb:/ipfs/QmcmJQ35JriwJFof263cgTp7mQAVKPMJYgmBCoejCGKqeN"
+			]
+		},
+		"DISNEY/SafeMath.sol": {
+			"keccak256": "0x14f7bc344c24517d9e14ebb8071e1cb63075b95203876f13c480d5b5c02f39f4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2d2eccaeae93039976ec6de037a3eccecb187a02e137a517e003120e28394940",
+				"dweb:/ipfs/QmaU8PiMvddzenJPjz7gYgCSzEvxfbDjikkneXE8nHcvKo"
+			]
+		}
+	},
+	"version": 1
+}
