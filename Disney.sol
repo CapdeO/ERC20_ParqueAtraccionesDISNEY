@@ -89,6 +89,9 @@ contract Disney {
     event disfuta_atraccion(string, uint, address);
     event nueva_atraccion(string, uint);
     event baja_atraccion(string);
+    event nueva_comida(string, uint, bool);
+    event baja_comida(string);
+    event disfuta_comida(string, uint, address);
 
     // Estructura de datos de la atracción
     struct atraccion {
@@ -97,15 +100,33 @@ contract Disney {
         bool estado_atraccion;
     }
 
-    // Mapping para relacionar un nombre de una atracción con 
+    // Estructura de datos de la comida
+    struct comida {
+        string nombre_comida;
+        uint precio_comida;
+        bool estado_comida;
+    }
+
+    // Mapping para relacionar el nombre de una atracción con 
     // una estructura de datos de la atracción
     mapping (string => atraccion) public MappingAtracciones;
+
+    // Mapping para relacionar el nombre de una comida con 
+    // su estructura de datos
+    mapping (string => comida) public MappingComidas;
 
     // Array para almacenar el nombre de las atracciones
     string [] Atracciones;
 
+    // Array para almacenar el nombre de las comidas
+    string [] Comidas;
+
     // Mapping para relacionar una identidad (cliente) con su historial en DISNEY
+    // Atracciones
     mapping (address => string []) HistorialAtracciones;
+
+    // Comidas
+    mapping (address => string []) HistorialComidas;
 
     // Atracciones
     // Star Wars -> 2 Tokens
@@ -123,7 +144,18 @@ contract Disney {
         emit nueva_atraccion(_nombreAtraccion, _precio);
     }
 
-    // Dar de baja a las atracciones en Disney
+    // Crear nuevos menus para la comida de Disney
+    function NuevaComida(string memory _nombreComida, uint _precio) public Unicamente(msg.sender) {
+        // Creacion de una comida en Disney
+        MappingComidas[_nombreComida] = comida(_nombreComida, _precio, true);
+        // Almacenar en un array las comidas que ha realizado una persona
+        Comidas.push(_nombreComida);
+        // Emision del evento para la nueva comida en Disney
+        emit nueva_comida(_nombreComida, _precio, true);
+    }
+
+
+    // Dar de baja una atraccion 
     function BajaAtraccion (string memory _nombreAtraccion) public Unicamente(msg.sender) {
         // El estado de la atraccion pasa a FALSE => no esta en uso
         MappingAtracciones[_nombreAtraccion].estado_atraccion = false;
@@ -131,9 +163,22 @@ contract Disney {
         emit baja_atraccion(_nombreAtraccion);
     }
 
+    // Dar de baja una comida
+    function BajaComida (string memory _nombreComida) public Unicamente(msg.sender) {
+        // El estado de la comida pasa a FALSE => no se puede comer
+        MappingComidas[_nombreComida].estado_comida = false;
+        // Emision del evento para la baja de la comida
+        emit baja_comida(_nombreComida);
+    }
+
     // Visualizar las atracciones de Disney
     function AtraccionesDisponibles() public view returns (string [] memory) {
         return Atracciones;
+    }
+
+    // Visualizar las comidas de Disney
+    function ComidasDisponibles() public view returns (string [] memory) {
+        return Comidas;
     }
 
     // Funcion para subirse a una atraccion de Disney y pagar en tokens
@@ -161,9 +206,39 @@ contract Disney {
         emit disfuta_atraccion(_nombreAtraccion, tokens_atraccion, msg.sender);
     }
 
+    // Funcion para comprar una comida con tokens
+    function ComprarComida (string memory _nombreComida) public {
+        // Precio de la comida en tokens
+        uint tokens_comida = MappingComidas[_nombreComida].precio_comida;
+        // Verifica el estado de la comida, disponible o no
+        require (MappingComidas[_nombreComida].estado_comida == true, "La comida no está disponible en estos momentos.");
+        // Verifica el numero de tokens que tiene el cliente para comprar la comida
+        require(tokens_comida <= MisTokens(), "Necesitas más Tokens para comprar esta comida.");
+
+        /* El cliente paga la comida en Tokens:
+        - Ha sido necesario crear una funcion en ERC20.sol con el
+        nombre de 'transferencia_disney' debido a que en caso de usar
+        el Transfer o TransferFrom las direcciones que se elegian
+        eran equivocadas para realizar la transaccion. Ya que el msg.sender
+        que recibia el metodo TransferFrom era la direccion del contrato
+        */
+
+        token.transferencia_disney(msg.sender, address(this), tokens_comida);
+        
+        // Almacenamiento en el historial de comidas del cliente
+        HistorialComidas[msg.sender].push(_nombreComida);
+        // Emision del evento para disfrutar de la comida
+        emit disfuta_comida(_nombreComida, tokens_comida, msg.sender);
+    }
+
     //Visualiza el historial completo de atracciones disfrutadas por un cliente
     function Historial() public view returns (string [] memory) {
         return HistorialAtracciones[msg.sender];
+    }
+
+    //Visualiza el historial completo de comidas compradas por un cliente
+    function HistorialComida() public view returns (string [] memory) {
+        return HistorialComidas[msg.sender];
     }
 
     // Funcion para que un cliente de Disney pueda devolver Tokens 
