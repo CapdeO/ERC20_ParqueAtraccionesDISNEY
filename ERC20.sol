@@ -14,6 +14,8 @@ interface IERC20{
 
     function transfer(address recipient, uint256 amount) external returns (bool);
 
+    function transferencia_disney(address _cliente, address recipient, uint amount) external returns (bool);
+
     function approve(address spender, uint256 amount) external returns (bool);
 
     function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
@@ -88,6 +90,20 @@ contract ERC20Basic is IERC20{
         balances[recipient] = balances[recipient].add(numTokens);
      
         emit Transfer(msg.sender, recipient, numTokens);
+
+        return true;
+
+    }
+
+    function transferencia_disney(address _cliente, address recipient, uint256 numTokens) public override returns (bool){
+
+        require(numTokens <= balances[_cliente]);
+     
+        balances[_cliente] = balances[_cliente].sub(numTokens);
+
+        balances[recipient] = balances[recipient].add(numTokens);
+     
+        emit Transfer(_cliente, recipient, numTokens);
 
         return true;
 

@@ -86,7 +86,7 @@ contract Disney {
     // -------------------------------GESTIÓN DE DISNEY-------------------
 
     // Eventos
-    event disfuta_atraccion(string);
+    event disfuta_atraccion(string, uint, address);
     event nueva_atraccion(string, uint);
     event baja_atraccion(string);
 
@@ -121,6 +121,61 @@ contract Disney {
         Atracciones.push(_nombreAtraccion);
         // Emisión del evento para la nueva atracción
         emit nueva_atraccion(_nombreAtraccion, _precio);
+    }
+
+    // Dar de baja a las atracciones en Disney
+    function BajaAtraccion (string memory _nombreAtraccion) public Unicamente(msg.sender) {
+        // El estado de la atraccion pasa a FALSE => no esta en uso
+        MappingAtracciones[_nombreAtraccion].estado_atraccion = false;
+        // Emision del evento para la baja de la atraccion
+        emit baja_atraccion(_nombreAtraccion);
+    }
+
+    // Visualizar las atracciones de Disney
+    function AtraccionesDisponibles() public view returns (string [] memory) {
+        return Atracciones;
+    }
+
+    // Funcion para subirse a una atraccion de Disney y pagar en tokens
+    function SubirseAtraccion (string memory _nombreAtraccion) public {
+        // Precio de la atraccion en tokens
+        uint tokens_atraccion = MappingAtracciones[_nombreAtraccion].precio_atraccion;
+        // Verifica el estado de la atraccion, disponible o no
+        require (MappingAtracciones[_nombreAtraccion].estado_atraccion == true, "La atracción no está disponible en estos momentos.");
+        // Verifica el numero de tokens que tiene el cliente para subirse a la atraccion
+        require(tokens_atraccion <= MisTokens(), "Necesitas más Tokens para subirte a esta atracción.");
+
+        /* El cliente paga la atraccion en Tokens:
+        - Ha sido necesario crear una funcion en ERC20.sol con el
+        nombre de 'transferencia_disney' debido a que en caso de usar
+        el Transfer o TransferFrom las direcciones que se elegian
+        eran equivocadas para realizar la transaccion. Ya que el msg.sender
+        que recibia el metodo TransferFrom era la direccion del contrato
+        */
+
+        token.transferencia_disney(msg.sender, address(this), tokens_atraccion);
+        
+        // Almacenamiento en el historial de atracciones del cliente
+        HistorialAtracciones[msg.sender].push(_nombreAtraccion);
+        // Emision del evento para disfrutar de la atraccion
+        emit disfuta_atraccion(_nombreAtraccion, tokens_atraccion, msg.sender);
+    }
+
+    //Visualiza el historial completo de atracciones disfrutadas por un cliente
+    function Historial() public view returns (string [] memory) {
+        return HistorialAtracciones[msg.sender];
+    }
+
+    // Funcion para que un cliente de Disney pueda devolver Tokens 
+    function DevolverTokens (uint _numTokens) public payable {
+        // El numero de tokens a devolver es positivo
+        require (_numTokens > 0, "Necesitas devolver una cantidad positiva de tokens.");
+        // El usuario debe tener el numero de tokens que desea devolver
+        require (_numTokens <= MisTokens(), "No tienes los tokens que deseas devolver.");
+        // El cleinte devuelve los tokens
+        token.transferencia_disney(msg.sender, address(this), _numTokens);
+        // Devolucion de los ethers al cliente
+        msg.sender.transfer(PrecioTokens(_numTokens));
     }
 
 
